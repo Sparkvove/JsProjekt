@@ -2,20 +2,32 @@
 Projekt na zajecia z Języków symboliczych.
 9. Symulator kasjera 
 Opis zadania:
+
 Okno podzielone jest na dwie części: 
+
 ■ Lewa: pusta, pojawiają się tam towary do skasowania 
-■ Prawa: przyciski od O do 9, przycisk "backspace", przycisk "Wyczyść", przycisk "Zważ" oraz pole tekstowe - wciskanie przycisków cyfr powoduje dopisywanie ich do pola,
-backspace wymazuje ostatnio wpisaną cyfrę, przycisk "Wyczyść" czyści pole tekstowe. Jeśli zawartość pola tekstowego to 1 i wciśnięty został przycisk cyfry,
+
+■ Prawa: przyciski od O do 9, przycisk "backspace", przycisk "Wyczyść", przycisk "Zważ" oraz pole tekstowe - wciskanie przycisków cyfr powoduje dopisywanie ich do pola, backspace wymazuje ostatnio wpisaną cyfrę, przycisk "Wyczyść" czyści pole tekstowe. Jeśli zawartość pola tekstowego to 1 i wciśnięty został przycisk cyfry,
 pole tekstowe jest czyszczone i dopisywana jest tam wybrana cyfra. 
+
 o Na początku po lewej stronie znajduje się przycisk "Następny klient", wciśnięcie go rozpoczyna grę (zapisanie aktualnego czasu i wyzerowanie licznika towarów) 
+
 o W losowym miejscu lewej strony okna pojawia się przycisk z:
+
 ■ nazwą towaru i jegoliczebnością, np. "Arbuz x10". Wciśnięcie przycisku powoduje zmniejszenie liczebności towaru o tyle, ile wpisane jest w polu tekstowym po prawej stronie, a pole to jest czyszczone (zawartość ustawiana na 1) lub 
+
 ■ nazwą towaru i napisem "?kg" oznaczającym, że jest to towar do zważenia. Jego kasowanie polega na kliknięciu przycisku z towarem, następnie kliknięciu przycisku "Zważ", a następnie ponownym kliknięciu przycisku z towarem. Po naciśnięciu przycisku "Zważ" etykieta towaru powinna się zmienić (ma być podana losowa waga od 0.05 do 2 kg).
+
 o Jeśli wartość pola tekstowego po prawej stronie przewyższa liczebność towaru, to gracz przegrywa i wyświetlane jest okno informujące o tym.
+
 o Po skasowaniu towaru (liczebność spadła do 0), do licznika towarów dodawana jest oryginalna liczebność towaru, oraz generowany jest kolejny towar. 
+
 o Generowane jest od 10 do 20 towarów, połowa z nich na sztuki. Liczba sztuk ma wynosić od 1 do 50 (losowo). Prawdopodobieństwo wylosowania liczebności 1 (pojedynczy artykuł) ma wynosić 50%. 
+
 o Po skasowaniu wszystkich towarów wyświetlany jest średni czas kasowania jednego przedmiotu (towar w liczebności 10 liczy się za 10 przedmiotów). 
+
 o Nazwy towarów mają być  losowane z minimum dwudziestoelementowej listy.
+
 o Towary mają być reprezentowane przez obiekty TowarNaSztuki i  TowarNaWagę dziedziczących po klasie Towar. W obiektach ma być przechowywana nazwa towaru, liczba sztuk lub waga, czas pojawienia się w lewej części okna i czas skasowania. 
 
 Testy 
