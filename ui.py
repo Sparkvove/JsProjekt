@@ -70,6 +70,71 @@ class button():
         return action
 
 
+def show_game_over_screen(counter,menuState,stateOfGame):
+    przegranaText = font.render('Przegrałeś!', True, white)
+    screen.blit(przegranaText, (300, 300))
+    if buttonRestart.draw_button():
+        counter = ''
+        menuState = True
+        stateOfGame = 'GAME'
+    return counter, menuState, stateOfGame
+
+
+def show_game_screen(counter, menuState, stateOfGame):
+    pygame.draw.rect(screen, black, (xCounter, yCounter, widthCounter, heightCounter))
+    counterText = font.render(str(counter), True, white)
+
+    if menuState:
+        if buttonNastepnyKlient.draw_button():
+            counter = '';
+            menuState = False
+    if not menuState:
+        screen.blit(counterText, (510, 40))
+
+    if button1.draw_button():
+        print('1')
+        counter += '1'
+    if button2.draw_button():
+        print('2')
+        counter += '2'
+    if button3.draw_button():
+        print('3')
+        counter += '3'
+    if button4.draw_button():
+        print('4')
+        counter += '4'
+    if button5.draw_button():
+        print('5')
+        counter += '5'
+    if button6.draw_button():
+        print('6')
+        counter += '6'
+    if button7.draw_button():
+        print('7')
+        counter += '7'
+    if button8.draw_button():
+        print('8')
+        counter += '8'
+    if button9.draw_button():
+        print('9')
+        counter += '9'
+    if button0.draw_button():
+        print('0')
+        counter += '0'
+    if buttonBackspace.draw_button():
+        print('Backspace')
+        counter = counter[:-1]
+    if buttonWyczysc.draw_button():
+        print('wyczysc')
+        counter = ''
+    if buttonZwaz.draw_button():
+        print('zwaz')
+        counter -= 1
+    if buttonPrzegrana.draw_button():
+        stateOfGame = 'GAMEOVER'
+    return counter, menuState, stateOfGame
+
+
 # Definiowanie przyciskow
 buttonWidth = 60
 buttonHeight = 60
@@ -86,6 +151,9 @@ button0 = button(540, 260,buttonWidth,buttonHeight, '0')
 buttonBackspace = button(420, 260,2*buttonWidth,buttonHeight, 'backspace')
 buttonWyczysc = button(420, 320,3*buttonWidth,buttonHeight, 'wyczysc')
 buttonZwaz = button(420, 380,3*buttonWidth,buttonHeight, 'zwaz')
+buttonNastepnyKlient = button(0,0,180,70, 'Następny klient')
+buttonPrzegrana = button(0,320,buttonWidth,buttonHeight,'Przegrana')
+buttonRestart = button(280,320,buttonWidth,buttonHeight,'Restart')
 
 # Definiowanie zmiennych pod tlo licznika
 xCounter= 420
