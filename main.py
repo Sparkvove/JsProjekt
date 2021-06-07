@@ -5,20 +5,19 @@ from pygame.locals import *
 
 pygame.init()
 
-screen = ui.screen
+window = ui.screen.PrintScreen()
 
+counter = ui.counter()
 
 pygame.display.set_caption('Symulacja Kasjera')
 
 curr_towar = 0
 
-counter = ""
 stateOfGame = 'GAME'
 menuState = True
-First = True
 run = True
 while run:
-    screen.fill(ui.bg)
+    window.fill(ui.screen.bg)
     if stateOfGame == 'GAME':
 
         counter, menuState, stateOfGame, curr_towar = ui.show_game_screen(counter, menuState, stateOfGame, curr_towar)

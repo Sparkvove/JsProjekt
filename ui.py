@@ -5,19 +5,29 @@ import Towary
 
 do_zwazenia = False
 towar_list = Towary.towar_list
+
 pygame.init()
 
-screen_width = 600
-screen_height = 440
 
-screen = pygame.display.set_mode((screen_width, screen_height))
-font = pygame.font.SysFont('Constantia', 25)
+class screen():
+    def __init__(self):
+        self.width = 600
+        self.height = 440
+        self.bg = (204, 102, 0)
+        self.red = (255, 0, 0)
+        self.black = (0, 0, 0)
+        self.white = (255, 255, 255)
+        self.font = pygame.font.SysFont('Constantia', 25)
 
-# Kolory
-bg = (204, 102, 0)
-red = (255, 0, 0)
-black = (0, 0, 0)
-white = (255, 255, 255)
+
+    def PrintScreen(self):
+        return pygame.display.set_mode((self.width, self.height))
+
+
+screen = screen()
+
+
+window = screen.PrintScreen()
 
 # Definicja klikniecie
 clicked = False
@@ -28,7 +38,7 @@ class button():
     button_col = (255, 0, 0)
     hover_col = (75, 225, 255)
     click_col = (50, 150, 255)
-    text_col = black
+    text_col = screen.black
 
     def __init__(self, x, y, width,height,text):
         self.x = x
@@ -52,33 +62,70 @@ class button():
         if button_rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == 1:
                 clicked = True
-                pygame.draw.rect(screen, self.click_col, button_rect)
+                pygame.draw.rect(window, self.click_col, button_rect)
             elif pygame.mouse.get_pressed()[0] == 0 and clicked == True:
                 clicked = False
                 action = True
             else:
-                pygame.draw.rect(screen, self.hover_col, button_rect)
+                pygame.draw.rect(window, self.hover_col, button_rect)
         else:
-            pygame.draw.rect(screen, self.button_col, button_rect)
+            pygame.draw.rect(window, self.button_col, button_rect)
 
         # Dodanie cieniowania
-        pygame.draw.line(screen, white, (self.x, self.y), (self.x + self.width, self.y), 2)
-        pygame.draw.line(screen, white, (self.x, self.y), (self.x, self.y + self.height), 2)
-        pygame.draw.line(screen, black, (self.x, self.y + self.height), (self.x + self.width, self.y + self.height), 2)
-        pygame.draw.line(screen, black, (self.x + self.width, self.y), (self.x + self.width, self.y + self.height), 2)
+        pygame.draw.line(window, screen.white, (self.x, self.y), (self.x + self.width, self.y), 2)
+        pygame.draw.line(window, screen.white, (self.x, self.y), (self.x, self.y + self.height), 2)
+        pygame.draw.line(window, screen.black, (self.x, self.y + self.height), (self.x + self.width, self.y + self.height), 2)
+        pygame.draw.line(window, screen.black, (self.x + self.width, self.y), (self.x + self.width, self.y + self.height), 2)
 
         # Dodanie tekstu
-        text_img = font.render(self.text, True, self.text_col)
+        text_img = screen.font.render(self.text, True, self.text_col)
         text_len = text_img.get_width()
-        screen.blit(text_img, (self.x + int(self.width / 2) - int(text_len / 2), self.y + 25))
+        window.blit(text_img, (self.x + int(self.width / 2) - int(text_len / 2), self.y + 25))
         return action
 
 
+class counter():
+
+    def __init__(self):
+        self._value = '1'
+        # Zmienne dotyczące tła licznika
+        self.x = 420
+        self.y = 0
+        self.width = 180
+        self.height = 80
+
+    def getCounterValue(self):
+        return self._value
+
+    def getCounterValueAsINT(self):
+        return int(self._value)
+
+    def setCounterValue(self, value):
+        tmpvalue = self.value
+        self.ClearCounterValue()
+        self.value = tmpvalue + value
+
+    def ClearCounterValue(self):
+        self.value = ''
+
+    def CreateCounterAsText(self):
+        counterText = screen.font.render(self.value, True, screen.white)
+        window.blit(counterText, (510, 40))
+
+    def BackspaceCounter(self):
+        self.value = self.value[:-1]
+
+    def CreateBGForCounter(self):
+        pygame.draw.rect(window, screen.black, (self.x, self.y, self.width, self.height))
+
+
+
 def show_game_win_screen(counter, menuState, stateOfGame, curr_towar):
-    wygranaText = font.render('Wygrałeś! o to Podsumowanie: ', True, white)
-    screen.blit(wygranaText, (300, 300))
+    global do_zwazenia
+    wygranaText = screen.font.render('Wygrałeś! o to Podsumowanie: ', True, screen.white)
+    window.blit(wygranaText, (300, 300))
     if buttonRestart.draw_button():
-        counter = ''
+        counter.ClearCounterValue()
         menuState = True
         stateOfGame = 'GAME'
         curr_towar = 0
@@ -86,10 +133,11 @@ def show_game_win_screen(counter, menuState, stateOfGame, curr_towar):
 
 
 def show_game_over_screen(counter, menuState, stateOfGame, curr_towar):
-    przegranaText = font.render('Przegrałeś!', True, white)
-    screen.blit(przegranaText, (300, 300))
+    global do_zwazenia
+    przegranaText = screen.font.render('Przegrałeś!', True, screen.white)
+    window.blit(przegranaText, (300, 300))
     if buttonRestart.draw_button():
-        counter = ''
+        counter.ClearCounterValue()
         menuState = True
         stateOfGame = 'GAME'
         curr_towar = 0
@@ -98,11 +146,8 @@ def show_game_over_screen(counter, menuState, stateOfGame, curr_towar):
 
 def show_game_screen(counter, menuState, stateOfGame, curr_towar):
     global towar_list, do_zwazenia
-    pygame.draw.rect(screen, black, (xCounter, yCounter, widthCounter, heightCounter))
 
-
-    counterText = font.render(str(counter), True, white)
-
+    counter.CreateBGForCounter()
 
     buttonTowar1 = CreateTowaryButtons(curr_towar)
 
@@ -110,21 +155,22 @@ def show_game_screen(counter, menuState, stateOfGame, curr_towar):
 
     if menuState:
         if buttonNastepnyKlient.draw_button():
-            counter = ''
             menuState = False
+            counter.ClearCounterValue()
+            counter.setCounterValue('1')
     if not menuState:
-        screen.blit(counterText, (510, 40))
+        counter.CreateCounterAsText()
         if buttonTowar1.draw_button():
             if typ == Towary.TowarNaSztuki:
 
-                if int(counter) > towar_list[curr_towar].how_many:
+                if int(counter.value) > towar_list[curr_towar].how_many:
                     stateOfGame = 'GAMEOVER'
 
-                elif int(counter) == towar_list[curr_towar].how_many:
+                elif int(counter.value) == towar_list[curr_towar].how_many:
                     curr_towar += 1
 
-                elif int(counter) < towar_list[curr_towar].how_many:
-                    towar_list[curr_towar].how_many -= int(counter)
+                elif int(counter.value) < towar_list[curr_towar].how_many:
+                    towar_list[curr_towar].how_many -= int(counter.value)
 
             if typ == Towary.TowarNaWage:
 
@@ -136,29 +182,30 @@ def show_game_screen(counter, menuState, stateOfGame, curr_towar):
 
 
     if button1.draw_button():
-        counter += '1'
+        counter.setCounterValue('1')
     if button2.draw_button():
-        counter += '2'
+        counter.setCounterValue('2')
     if button3.draw_button():
-        counter += '3'
+        counter.setCounterValue('3')
     if button4.draw_button():
-        counter += '4'
+        counter.setCounterValue('4')
     if button5.draw_button():
-        counter += '5'
+        counter.setCounterValue('5')
     if button6.draw_button():
-        counter += '6'
+        counter.setCounterValue('6')
     if button7.draw_button():
-        counter += '7'
+        counter.setCounterValue('7')
     if button8.draw_button():
-        counter += '8'
+        counter.setCounterValue('8')
     if button9.draw_button():
-        counter += '9'
+        counter.setCounterValue('9')
     if button0.draw_button():
-        counter += '0'
+        counter.setCounterValue('0')
     if buttonBackspace.draw_button():
-        counter = counter[:-1]
+        counter.BackspaceCounter()
     if buttonWyczysc.draw_button():
-        counter = ''
+        counter.ClearCounterValue()
+        counter.setCounterValue('')
     if buttonZwaz.draw_button():
 
         if typ == Towary.TowarNaSztuki:
@@ -216,8 +263,3 @@ def CreateTowaryButtons(curr_item):
 
 
 
-# Definiowanie zmiennych pod tlo licznika
-xCounter= 420
-yCounter= 0
-widthCounter = 180
-heightCounter = 80
