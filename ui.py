@@ -1,6 +1,10 @@
 import pygame
+import random
 from pygame.locals import *
+import Towary
 
+do_zwazenia = False
+towar_list = Towary.towar_list
 pygame.init()
 
 screen_width = 600
@@ -70,69 +74,106 @@ class button():
         return action
 
 
-def show_game_over_screen(counter,menuState,stateOfGame):
+def show_game_win_screen(counter, menuState, stateOfGame, curr_towar):
+    wygranaText = font.render('Wygrałeś! o to Podsumowanie: ', True, white)
+    screen.blit(wygranaText, (300, 300))
+    if buttonRestart.draw_button():
+        counter = ''
+        menuState = True
+        stateOfGame = 'GAME'
+        curr_towar = 0
+    return counter, menuState, stateOfGame, curr_towar
+
+
+def show_game_over_screen(counter, menuState, stateOfGame, curr_towar):
     przegranaText = font.render('Przegrałeś!', True, white)
     screen.blit(przegranaText, (300, 300))
     if buttonRestart.draw_button():
         counter = ''
         menuState = True
         stateOfGame = 'GAME'
-    return counter, menuState, stateOfGame
+        curr_towar = 0
+    return counter, menuState, stateOfGame, curr_towar
 
 
-def show_game_screen(counter, menuState, stateOfGame):
+def show_game_screen(counter, menuState, stateOfGame, curr_towar):
+    global towar_list, do_zwazenia
     pygame.draw.rect(screen, black, (xCounter, yCounter, widthCounter, heightCounter))
+
+
     counterText = font.render(str(counter), True, white)
+
+
+    buttonTowar1 = CreateTowaryButtons(curr_towar)
+
+    typ = type(towar_list[curr_towar])
 
     if menuState:
         if buttonNastepnyKlient.draw_button():
-            counter = '';
+            counter = ''
             menuState = False
     if not menuState:
         screen.blit(counterText, (510, 40))
+        if buttonTowar1.draw_button():
+            if typ == Towary.TowarNaSztuki:
+
+                if int(counter) > towar_list[curr_towar].how_many:
+                    stateOfGame = 'GAMEOVER'
+
+                elif int(counter) == towar_list[curr_towar].how_many:
+                    curr_towar += 1
+
+                elif int(counter) < towar_list[curr_towar].how_many:
+                    towar_list[curr_towar].how_many -= int(counter)
+
+            if typ == Towary.TowarNaWage:
+
+                if towar_list[curr_towar].weighed == True:
+                    curr_towar += 1
+
+                elif towar_list[curr_towar].weighed == False:
+                    do_zwazenia = True
+
 
     if button1.draw_button():
-        print('1')
         counter += '1'
     if button2.draw_button():
-        print('2')
         counter += '2'
     if button3.draw_button():
-        print('3')
         counter += '3'
     if button4.draw_button():
-        print('4')
         counter += '4'
     if button5.draw_button():
-        print('5')
         counter += '5'
     if button6.draw_button():
-        print('6')
         counter += '6'
     if button7.draw_button():
-        print('7')
         counter += '7'
     if button8.draw_button():
-        print('8')
         counter += '8'
     if button9.draw_button():
-        print('9')
         counter += '9'
     if button0.draw_button():
-        print('0')
         counter += '0'
     if buttonBackspace.draw_button():
-        print('Backspace')
         counter = counter[:-1]
     if buttonWyczysc.draw_button():
-        print('wyczysc')
         counter = ''
     if buttonZwaz.draw_button():
-        print('zwaz')
-        counter -= 1
+
+        if typ == Towary.TowarNaSztuki:
+            stateOfGame = 'GAMEOVER'
+        else:
+             if do_zwazenia == True:
+                towar_list[curr_towar].weighed = True
+                do_zwazenia = False
+
     if buttonPrzegrana.draw_button():
         stateOfGame = 'GAMEOVER'
-    return counter, menuState, stateOfGame
+    return counter, menuState, stateOfGame, curr_towar
+
+
+
 
 
 # Definiowanie przyciskow
@@ -154,6 +195,26 @@ buttonZwaz = button(420, 380,3*buttonWidth,buttonHeight, 'zwaz')
 buttonNastepnyKlient = button(0,0,180,70, 'Następny klient')
 buttonPrzegrana = button(0,320,buttonWidth,buttonHeight,'Przegrana')
 buttonRestart = button(280,320,buttonWidth,buttonHeight,'Restart')
+
+
+def CreateTowaryButtons(curr_item):
+    global towar_list
+    typ = type(towar_list[curr_item])
+    if typ == Towary.TowarNaSztuki:
+        buttonTowar1 = button(20, 20, buttonWidth, buttonHeight,
+                              towar_list[curr_item].name + ' x' + str(towar_list[curr_item].how_many))
+    if typ == Towary.TowarNaWage:
+        if towar_list[curr_item].weighed == False:
+            buttonTowar1 = button(20, 20, buttonWidth, buttonHeight,
+                                towar_list[curr_item].name + ' ?kg')
+        else:
+            buttonTowar1 = button(20, 20, buttonWidth, buttonHeight,
+                                  towar_list[curr_item].name + ' '+ str(towar_list[curr_item].weight) + 'kg')
+    return buttonTowar1
+
+
+
+
 
 # Definiowanie zmiennych pod tlo licznika
 xCounter= 420
