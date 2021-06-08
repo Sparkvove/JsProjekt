@@ -13,7 +13,7 @@ class Towar:
     def __init__(self):
         self.name = random.choice(towar_names)
         self.create_time = datetime.now()
-        self.checkout_time = datetime.now()
+        self.scan_time = datetime.now()
 
 
 class TowarNaSztuki(Towar):

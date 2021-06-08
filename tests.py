@@ -1,8 +1,9 @@
 import unittest
 import Towary
+import pygame
+import ui
+import game
 import random
-from game import Game
-
 
 class TestGame(unittest.TestCase):
     #
@@ -15,5 +16,5 @@ class TestGame(unittest.TestCase):
     #
 
     def ScanningTowarNaSztukiByClickinFewTimes(self):
-        Towar = Towary.TowarNaSztuki()
-        Towar.how_many = random.randint(2, 50)
+        pass
+
