@@ -88,7 +88,6 @@ def show_game_over_screen(counter, game):
 
 def show_game_screen(counter, game, testing, tryb):
     counter.CreateBGForCounter()
-
     buttonTowar = CreateTowaryButtons(game, testing)
     typ = type(game.towar_list[game.curr_towar])
 
@@ -120,10 +119,13 @@ def show_game_screen(counter, game, testing, tryb):
                     game.do_zwazenia = False
         counter.ClearCounterValue()
         counter.setCounterValue('1')
-
     if game.menuState:
         if game.buttonNastepnyKlient.draw_button():
-            ClickNastepnyKlient(game, counter)
+            game.timerStart = datetime.now()
+            game.menuState = False
+            counter.ClearCounterValue()
+            counter.setCounterValue('1')
+
 
     if not game.menuState:
         counter.CreateCounterAsText()
@@ -144,63 +146,62 @@ def show_game_screen(counter, game, testing, tryb):
                     game.towar_list[game.curr_towar].how_many -= int(counter.value)
                     game.TowaryCounter += int(counter.value)
 
-                counter.ClearCounterValue()
-                counter.setCounterValue('1')
+            counter.ClearCounterValue()
+            counter.setCounterValue('1')
 
-                if typ == Towary.TowarNaWage:
+            if typ == Towary.TowarNaWage:
 
-                    if game.towar_list[game.curr_towar].weighed == True:
-                        game.TowaryCounter += 1
-                        game.curr_towar += 1
+                if game.towar_list[game.curr_towar].weighed == True:
+                    game.TowaryCounter += 1
+                    game.curr_towar += 1
 
-                    elif game.towar_list[game.curr_towar].weighed == False:
-                        game.do_zwazenia = True
+                elif game.towar_list[game.curr_towar].weighed == False:
+                    game.do_zwazenia = True
 
-                counter.ClearCounterValue()
-                counter.setCounterValue('1')
+            counter.ClearCounterValue()
+            counter.setCounterValue('1')
 
-        if game.button1.draw_button():
-                counter.setCounterValue('1')
-        if game.button2.draw_button():
-                counter.setCounterValue('2')
-        if game.button3.draw_button():
-                counter.setCounterValue('3')
-        if game.button4.draw_button():
-                counter.setCounterValue('4')
-        if game.button5.draw_button():
-                counter.setCounterValue('5')
-        if game.button6.draw_button():
-                counter.setCounterValue('6')
-        if game.button7.draw_button():
-                counter.setCounterValue('7')
-        if game.button8.draw_button():
-                counter.setCounterValue('8')
-        if game.button9.draw_button():
-                counter.setCounterValue('9')
-        if game.button0.draw_button():
-                counter.setCounterValue('0')
-        if game.buttonBackspace.draw_button():
-                counter.BackspaceCounter()
-        if game.buttonWyczysc.draw_button():
-                counter.ClearCounterValue()
-                counter.setCounterValue('')
-        if game.buttonZwaz.draw_button():
+    if game.button1.draw_button():
+        counter.setCounterValue('1')
+    if game.button2.draw_button():
+        counter.setCounterValue('2')
+    if game.button3.draw_button():
+        counter.setCounterValue('3')
+    if game.button4.draw_button():
+        counter.setCounterValue('4')
+    if game.button5.draw_button():
+        counter.setCounterValue('5')
+    if game.button6.draw_button():
+        counter.setCounterValue('6')
+    if game.button7.draw_button():
+        counter.setCounterValue('7')
+    if game.button8.draw_button():
+        counter.setCounterValue('8')
+    if game.button9.draw_button():
+        counter.setCounterValue('9')
+    if game.button0.draw_button():
+        counter.setCounterValue('0')
+    if game.buttonBackspace.draw_button():
+        counter.BackspaceCounter()
+    if game.buttonWyczysc.draw_button():
+        counter.ClearCounterValue()
+        counter.setCounterValue('')
+    if game.buttonZwaz.draw_button():
 
-            if typ == Towary.TowarNaSztuki:
-                game.stateOfGame = 'GAMEOVER'
-            else:
-                if game.do_zwazenia == True:
-                    game.towar_list[game.curr_towar].weighed = True
-                    game.do_zwazenia = False
-
-        if game.buttonPrzegrana.draw_button():
+        if typ == Towary.TowarNaSztuki:
             game.stateOfGame = 'GAMEOVER'
+        else:
+            if game.do_zwazenia == True:
+                game.towar_list[game.curr_towar].weighed = True
+                game.do_zwazenia = False
 
-        if game.buttonWygrana.draw_button():
-            game.timerStop = datetime.now()
-            game.stateOfGame = 'GAMEWIN'
+    if game.buttonPrzegrana.draw_button():
+        game.stateOfGame = 'GAMEOVER'
 
-        return counter, game
+    if game.buttonWygrana.draw_button():
+        game.timerStop = datetime.now()
+        game.stateOfGame = 'GAMEWIN'
+    return counter, game
 
 def CreateTowaryButtons(game,testing):
     typ = type(game.towar_list[game.curr_towar])
@@ -215,31 +216,25 @@ def CreateTowaryButtons(game,testing):
                                      + str(game.towar_list[game.curr_towar].weight) + 'kg')
     return buttonTowar
 
-def ClickNastepnyKlient(game,counter):
-    game.timerStart = datetime.now()
-    game.menuState = False
-    counter.ClearCounterValue()
-    counter.setCounterValue('1')
-    return game,counter
 
-def application(GAME, counter):
-    while GAME.run:
-        GAME.window.fill(GAME.screen.bg)
-        if GAME.stateOfGame == 'GAME':
-            counter, GAME = show_game_screen(counter, GAME, False, 0)
+def application(game, counter):
+    while game.run:
+        game.window.fill(game.screen.bg)
+        if game.stateOfGame == 'GAME':
+            counter, game = show_game_screen(counter, game, False, 0)
 
-            if GAME.curr_towar == Towary.how_many_towar - 1:
-                GAME.timerStop = datetime.now()
-                GAME.stateOfGame = 'GAMEWIN'
+            if game.curr_towar == Towary.how_many_towar - 1:
+                game.timerStop = datetime.now()
+                game.stateOfGame = 'GAMEWIN'
 
-        elif GAME.stateOfGame == 'GAMEOVER':
-            counter, GAME = show_game_over_screen(counter, GAME)
+        elif game.stateOfGame == 'GAMEOVER':
+            counter, game = show_game_over_screen(counter, game)
 
-        elif GAME.stateOfGame == 'GAMEWIN':
-            counter, GAME = show_game_win_screen(counter, GAME)
+        elif game.stateOfGame == 'GAMEWIN':
+            counter, game = show_game_win_screen(counter, game)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                GAME.run = False
+                game.run = False
 
         pygame.display.update()
