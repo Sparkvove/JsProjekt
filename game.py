@@ -2,7 +2,6 @@ import ui
 import Towary
 import pygame
 from datetime import datetime
-import time
 pygame.init()
 
 

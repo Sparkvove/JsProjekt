@@ -7,7 +7,7 @@ import game
 
 
 class TestGame(unittest.TestCase):
-
+#
     def CreateGame(self, counter_value, tryb):
         pygame.init()
         GAME = game.Game()
