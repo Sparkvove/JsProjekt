@@ -109,16 +109,22 @@ class counter(Colours):
         return int(self.value)
 
     def setCounterValue(self, value):
-        tmpvalue = self.value
-        self.ClearCounterValue()
-        self.value = tmpvalue + value
+        if len(self.value) < 3:
+            tmpvalue = self.value
+            self.ClearCounterValue()
+            self.value = tmpvalue + value
 
     def ClearCounterValue(self):
         self.value = ''
 
     def CreateCounterAsText(self):
         counterText = screen.font.render(self.value, True, self.white)
-        screen.window.blit(counterText, (510, 40))
+        if len(self.value) == 1 or 0:
+            screen.window.blit(counterText, (510, 40))
+        if len(self.value) == 2:
+            screen.window.blit(counterText, (500, 40))
+        if len(self.value) == 3:
+            screen.window.blit(counterText, (500, 40))
 
     def BackspaceCounter(self):
         self.value = self.value[:-1]
