@@ -1,19 +1,11 @@
 from datetime import datetime
 import random
 
-import ui
-
-towar_names = ["Jabłko", "Banan", "Gruszka", "Pomidor", "Pomelo", "Truskawka", "Malina", "Pomarańcza", "Brokuł", "Arbuz",
-               "Dynia", "Papryka", "Cebula", "Ogórek", "Burak", "Ananas", "Cytryna", "Kukurydza", "Czosnek", "Melon"]
-
+towar_names = ["Jabłko", "Banan", "Gruszka", "Pomidor", "Pomelo", "Truskawka", "Malina", "Pomarańcza", "Brokuł",
+               "Arbuz", "Dynia", "Papryka", "Cebula", "Ogórek", "Burak",
+               "Ananas", "Cytryna", "Kukurydza", "Czosnek", "Melon"]
 
 how_many_towar = random.randint(10, 20)
-
-
-
-global current_item_type
-global current_item
-global current_item_index
 
 
 class Towar:
@@ -33,7 +25,7 @@ class TowarNaSztuki(Towar):
     @staticmethod
     def get_how_many():
         one_or_more = random.choice([1, 2])
-        if(one_or_more == 1):
+        if one_or_more == 1:
             return 1
         else:
             return random.randint(2, 50)
@@ -50,9 +42,3 @@ class TowarNaWage(Towar):
 def shuffle_list_and_return(x):
     random.shuffle(x)
     return x
-
-
-
-towar_list = shuffle_list_and_return([TowarNaSztuki() if x < int(how_many_towar / 2)
-                                      else TowarNaWage() for x in range(how_many_towar)])
-

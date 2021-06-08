@@ -1,39 +1,33 @@
 import pygame
 import ui
 import Towary
-from pygame.locals import *
+import game
 
 pygame.init()
-
-window = ui.screen.PrintScreen()
-
+screen = ui.screen
+window = ui.window
 counter = ui.counter()
+GAME = game.Game()
+GAME.SetGameCaption()
 
-pygame.display.set_caption('Symulacja Kasjera')
-
-curr_towar = 0
-
-stateOfGame = 'GAME'
-menuState = True
-run = True
-while run:
+while GAME.run:
     window.fill(ui.screen.bg)
-    if stateOfGame == 'GAME':
+    if GAME.stateOfGame == 'GAME':
 
-        counter, menuState, stateOfGame, curr_towar = ui.show_game_screen(counter, menuState, stateOfGame, curr_towar)
+        counter, GAME = game.show_game_screen(counter, GAME)
 
-        if curr_towar == Towary.how_many_towar - 1:
-            stateOfGame = 'GAMEWIN'
+        if GAME.curr_towar == Towary.how_many_towar - 1:
+            GAME.stateOfGame = 'GAMEWIN'
 
-    elif stateOfGame == 'GAMEOVER':
-        counter, menuState, stateOfGame, curr_towar = ui.show_game_over_screen(counter, menuState, stateOfGame, curr_towar)
+    elif GAME.stateOfGame == 'GAMEOVER':
+        counter, GAME = game.show_game_over_screen(counter, GAME)
 
-    elif stateOfGame == 'GAMEWIN':
-        counter, menuState, stateOfGame, curr_towar = ui.show_game_win_screen(counter, menuState, stateOfGame, curr_towar)
+    elif GAME.stateOfGame == 'GAMEWIN':
+        counter, GAME = game.show_game_win_screen(counter, GAME)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            GAME.run = False
 
     pygame.display.update()
 
