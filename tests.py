@@ -1,4 +1,3 @@
-
 import unittest
 import Towary
 import pygame
@@ -16,7 +15,10 @@ def create_game(counter_value, mode):
     p1 = Towary.TowarNaSztuki()
     p2 = Towary.TowarNaSztuki()
     p1.how_many = 20
-    testing_game.towar_list = [p1, p2]
+
+    set_testing_list = lambda first, second: [first, second]
+    testing_game.towar_list = set_testing_list(p1, p2)
+
     counter.value = counter_value
 
     while testing_game.run:
@@ -62,6 +64,10 @@ class TestGame(unittest.TestCase):
         for x in range(ilosc_liczb):
             y = Towary.TowarNaSztuki.get_how_many()
             if y == 1:
+
                 licznik += 1
 
-        self.assertGreater(licznik, (ilosc_liczb/2)-10)
+        met_conditions = lambda range_value: (range_value/2)-10
+        condition = met_conditions(ilosc_liczb)
+
+        self.assertGreater(licznik, condition)

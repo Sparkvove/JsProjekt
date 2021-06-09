@@ -20,7 +20,10 @@ class Screen(Colours):
         super().__init__()
         self.width = 600
         self.height = 440
-        self.font = pygame.font.SysFont('Constantia', 20)
+
+        set_font = lambda font, size: pygame.font.SysFont(font, size)
+        self.font = set_font('Constantia', 20)
+
         self.window = Screen.print_screen(self)
 
     def print_screen(self):
@@ -36,7 +39,10 @@ class Button(Colours):
         super().__init__()
         self.x = x
         self.y = y
-        self.width = multiplier * 60
+
+        calculate_width = lambda m: m * 60
+        self.width = calculate_width(multiplier)
+
         self.height = 60
         self.text = text
         self.button_col = self.red
