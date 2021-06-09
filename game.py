@@ -6,7 +6,9 @@ pygame.init()
 
 
 class Game:
-
+    """
+    Klasa Game - zawiera ona wszystkie przyciski, oraz wszelkie zmienne potrzebne do funkcjonowania aplikacji
+    """
     def __init__(self):
         self.run = True
         self.menuState = True
@@ -44,10 +46,18 @@ class Game:
 
     @staticmethod
     def set_game_caption():
+        """
+        Metoda ta odpowiada za ustawienie tytułu aplikacji(okna)
+        """
         pygame.display.set_caption('Symulacja Kasjera')
 
 
 def show_game_win_screen(counter, game):
+    """
+    Metoda ta odpowiada za wyświetlenie ekranu w przypadku wygrania
+    Pokazuje ona wszystkie wymagane statystyki:
+    Skasowana ilość towarów, Totalny czas grania oraz średni czas kasowania towaru
+    """
     game.timeToWin = game.timerStop - game.timerStart
     game.timeToWin = game.timeToWin.total_seconds()
     game.averageTime = game.timeToWin / game.TowaryCounter
@@ -78,8 +88,11 @@ def show_game_win_screen(counter, game):
 
 
 def show_game_over_screen(counter, game):
+    """
+    Metoda ta odpowiada za wyświetlenie ekranu w przypadku przegrania gry
+    """
     przegrana_text = game.screen.font.render('Przegrałeś!', True, game.screen.white)
-    game.window.blit(przegrana_text, (300, 300))
+    game.window.blit(przegrana_text, (250, 300))
 
     if game.buttonRestart.draw_button():
         counter.clear_counter_value()
@@ -91,6 +104,20 @@ def show_game_over_screen(counter, game):
 
 
 def show_game_screen(counter, game, testing, mode):
+    """
+    Najważniesza funkcja programu, obsługuje ona samo "granie" w gre(tzn że gra "trwa")
+    W niej wyświetlamy wszystkie elementy interfejsu, tzn. Wszystkie przyciski, licznik
+    Sprawdza ona czy jesteśmy w menu(Przycisk nastepny klient) czy jesteśmy już w grze
+    Obsługujemy również w niej kliknięcia we wszystkie możliwe przyciski
+    Sprawdzamy również czy nie próbujemy ważyć TowaruNaSztuki oraz obsługujemy sam system ważenia towaru
+
+    Dodatkowo w tej funkcji wykonywane są prawie wszystkie testy
+    dlatego do funkcji przekazujemy:
+    :param game: Głowny obiekt klasy Game
+    :param counter: obiekt  klasy Counter
+    :param testing: typ Bool(True lub False), określamy czy funkcja ma działać w trybie testów czy nie
+    :param mode: typ int(1 lub 2), określamy aktualny typ testowania
+    """
     counter.create_bg_for_counter()
     button_towar = create_towary_buttons(game)
     typ = type(game.towar_list[game.curr_towar])
@@ -210,6 +237,10 @@ def show_game_screen(counter, game, testing, mode):
 
 
 def create_towary_buttons(game):
+    """
+    Funkcja odpowiadająca za dynamiczne tworzenie i odśweżanie(np. gdy zważymy towar, lub zmniejszymy jego ilość)
+    przycisku aktualnego Towaru
+    """
     typ = type(game.towar_list[game.curr_towar])
     if typ == Towary.TowarNaSztuki:
         button_towar = ui.Button(20, 20, 2, game.towar_list[game.curr_towar].name + ' x' +
@@ -224,6 +255,14 @@ def create_towary_buttons(game):
 
 
 def application(game, counter):
+    """
+    Funkcja ta odpowiada za główną pętle programu(używając biblioteki pygame musimy używać głównej pętli)
+    Sprawdza ona aktualny stan gry(wygrana, przegrana, trwa), odświeża ona również aplikacje, sprawdzając
+    wszelkiego rodzaju zdarzenia w aplikacji(np wcisniecie przycisku, wyłączenie aplikacji, lub zmiania stanu gry)
+
+    :param game: Głowny obiekt klasy Game
+    :param counter: obiekt  klasy Counter
+    """
     while game.run:
         game.window.fill(game.screen.bg)
         if game.stateOfGame == 'GAME':

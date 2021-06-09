@@ -7,6 +7,13 @@ import game
 
 
 def create_game(counter_value, mode):
+    """
+    Funkcja ta służy do Tworzenia testowej głównej pętli gry dla Testów
+    tworzymy w niej obiekt klasy game, counter, przypisujemy do testowania spredefiniowane elementy p1, p2
+    oraz przypisujemy przekazywaną wartość licznika
+    :param counter_value: przekazujemy wartość licznika (używane w licznych testach)
+    :param mode: przekazujemy tryb testowania pętli
+    """
     pygame.init()
     testing_game = Game()
     counter = ui.Counter()
@@ -37,28 +44,52 @@ def create_game(counter_value, mode):
 
 
 class TestGame(unittest.TestCase):
+    """
+    Klasa odpowiadająca za wszystkie testy w aplikacji
+    """
 
     def test_scanning_towar_na_sztuki_by_clicking_few_times(self):
+        """
+        Meotda ta sprawdza czy działa skasowanie towaru poprzez klikanie na niego pare razy
+        """
         counter, testing_game = create_game('1', 1)
         self.assertEqual(testing_game.curr_towar, 1)
 
     def test_scanning_towar_na_sztuki_by_clicking_one_time(self):
+        """
+        Metoda ta sprawdza czy działa skasowanie towaru poprzez kliknięcie na niego jeden raz
+        """
         counter, testing_game = create_game('20', 1)
         self.assertEqual(counter.value, '1')
 
     def test_scanning_towar_na_sztuki_by_clicking_one_time_and_exceed_value(self):
+        """
+        Metoda ta sprawdza czy przegrywamy gre w przypadku kliknięcia na towar o mniejszej ilości niż licznik
+        """
         counter, testing_game = create_game('40', 1)
         self.assertEqual(testing_game.stateOfGame, 'GAMEOVER')
 
     def test_weight_towar_na_sztuki(self):
+        """
+        Meotda ta sprawdza czy przegrywamy gre w przypadku próby zważenia towaru na sztuki
+        """
         counter, testing_game = create_game('40', 2)
         self.assertEqual(testing_game.stateOfGame, 'GAMEOVER')
 
     def test_win_game(self):
+        """
+        Metoda ta sprawdza czy wygramy gre, w przypadku skasowania wszystkich towarów
+        """
         counter, testing_game = create_game('20', 1)
         self.assertEqual(testing_game.stateOfGame, 'GAMEWIN')
 
     def test_check_if_values_equals_one_enough_times(self):
+        """
+        Metoda ta sprawdza czy ilosć towaru = 1 występuje wystarczająco często (50%)
+        od określonej liczby_liczb w wyniku odejmuje 10, ponieważ pomimo tego że szansa
+        na ilość_towaru wynosic 50%, to w niektrych przypadkach ilość tych towarów będzie mniejsza lub większa niz 50%
+        Dlatego jako fakt zadawalajoncy uznaje 40% wszystkich liczb
+        """
         ilosc_liczb = 100
         licznik = 0
         for x in range(ilosc_liczb):

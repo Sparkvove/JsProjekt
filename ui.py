@@ -8,6 +8,9 @@ clicked = False
 
 
 class Colours:
+    """
+    Klasa Clours, zawiera ona w sobie kolory używanie w tworzeniu interfejsu
+    """
     def __init__(self):
         self.bg = (204, 102, 0)
         self.red = (255, 0, 0)
@@ -16,6 +19,10 @@ class Colours:
 
 
 class Screen(Colours):
+    """
+    Klasa ta dziedziczy po klasie Colours, ustawia ona rodzaj i rozmiar czcionki używanej w programie
+    Dodatkowo obiektem tej klasy jest wyświetlany ekran
+    """
     def __init__(self):
         super().__init__()
         self.width = 600
@@ -34,7 +41,10 @@ screen = Screen()
 
 
 class Button(Colours):
-
+    """
+    Klasa ta dziedziczy po klasie Colours, odpowiada ona za utworzenie wszystkich przycisków w aplikacji
+    Wykrywa ona również klikniecie oraz najechania na konkretny przycisk
+    """
     def __init__(self, x, y, multiplier, text):
         super().__init__()
         self.x = x
@@ -52,6 +62,9 @@ class Button(Colours):
         self.button_rect = Button.button_bg(self)
 
     def button_shade(self):
+        """
+        Metoda ta odpowiada za tworzenie efektu "cienia" na przyciskach
+        """
         pygame.draw.line(screen.window, self.white, (self.x, self.y), (self.x + self.width, self.y), 2)
         pygame.draw.line(screen.window, self.white, (self.x, self.y), (self.x, self.y + self.height), 2)
         pygame.draw.line(screen.window, self.black, (self.x, self.y + self.height),
@@ -60,14 +73,23 @@ class Button(Colours):
                          (self.x + self.width, self.y + self.height), 2)
 
     def button_text(self):
+        """
+        Metoda ta odpowiada za dodawanie tesktu do przycisków
+        """
         text_img = screen.font.render(self.text, True, self.text_col)
         text_len = text_img.get_width()
         screen.window.blit(text_img, (self.x + int(self.width / 2) - int(text_len / 2), self.y + 25))
 
     def button_bg(self):
+        """
+        Metoda ta odpowiada za utworzenie tła pod przycisk
+        """
         return Rect(self.x, self.y, self.width, self.height)
 
     def draw_button(self):
+        """
+        Metoda ta odpowiada za wykrywanie kliknięcia oraz najechania na przyciski
+        """
         global clicked
         action = False
 
@@ -96,7 +118,9 @@ class Button(Colours):
 
 
 class Counter(Colours):
-
+    """
+    Klasa ta dziedziczy po klasie Colours, odpowiada ona za licznik w grze(wyświetlanie, zmiana wartości, tło licznika)
+    """
     def __init__(self):
         super().__init__()
         self.value = '1'
@@ -109,15 +133,26 @@ class Counter(Colours):
         return self.value
 
     def set_counter_value(self, value):
+        """
+        Metoda ta ustawia wartość licznika poprzez wyczyszczenie licznika oraz utworzenie nowego.
+        Dodatkowo sprawdza ona długość licznika, aby nie wykroczył on poza obszar aplikacji
+        :param value: Wartość którą chcemy dopisać do naszego licznika
+        """
         if len(self.value) < 3:
             tmpvalue = self.value
             self.clear_counter_value()
             self.value = tmpvalue + value
 
     def clear_counter_value(self):
+        """
+        Metoda czyszcząca wartość licznika
+        """
         self.value = ''
 
     def create_counter_as_text(self):
+        """
+        Metoda która zamienia wartość licznika na wyświetlany tekst na ekranie
+        """
         counter_text = screen.font.render(self.value, True, self.white)
         if len(self.value) == 1 or 0:
             screen.window.blit(counter_text, (510, 40))
@@ -127,7 +162,14 @@ class Counter(Colours):
             screen.window.blit(counter_text, (500, 40))
 
     def backspace_counter(self):
+        """
+        Metoda ta odpowiada za zmiane wartości licznika przy wciśnięciu przyciska backspace
+        """
         self.value = self.value[:-1]
 
     def create_bg_for_counter(self):
+        """
+        Metoda która tworzy tło pod licznik
+        Jest on w formie czarnego prostokąta o określonych rozmiarach
+        """
         pygame.draw.rect(screen.window, self.black, (self.x, self.y, self.width, self.height))
