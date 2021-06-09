@@ -1,10 +1,10 @@
 import pygame
 import ui
 import game
-
-pygame.init()
-counter = ui.counter()
-GAME = game.Game()
-GAME.SetGameCaption()
-game.application(GAME, counter)
-pygame.quit()
+if __name__ == '__main__':
+    pygame.init()
+    counter = ui.Counter()
+    GAME = game.Game()
+    GAME.set_game_caption()
+    game.application(GAME, counter)
+    pygame.quit()

@@ -1,14 +1,13 @@
 import pygame
 from pygame.locals import *
 
-
 pygame.init()
 
 # Definicja klikniecia
 clicked = False
 
 
-class Colours():
+class Colours:
     def __init__(self):
         self.bg = (204, 102, 0)
         self.red = (255, 0, 0)
@@ -22,31 +21,29 @@ class Screen(Colours):
         self.width = 600
         self.height = 440
         self.font = pygame.font.SysFont('Constantia', 20)
-        self.window = Screen.PrintScreen(self)
+        self.window = Screen.print_screen(self)
 
-    def PrintScreen(self):
+    def print_screen(self):
         return pygame.display.set_mode((self.width, self.height))
 
 
 screen = Screen()
 
 
-
-class button(Colours):
+class Button(Colours):
 
     def __init__(self, x, y, multiplier, text):
         super().__init__()
         self.x = x
         self.y = y
-        self.width = multiplier*60
+        self.width = multiplier * 60
         self.height = 60
         self.text = text
         self.button_col = self.red
         self.hover_col = (75, 225, 255)
         self.click_col = (50, 150, 255)
         self.text_col = self.black
-        self.button_rect = button.button_bg(self)
-
+        self.button_rect = Button.button_bg(self)
 
     def button_shade(self):
         pygame.draw.line(screen.window, self.white, (self.x, self.y), (self.x + self.width, self.y), 2)
@@ -85,14 +82,14 @@ class button(Colours):
             pygame.draw.rect(screen.window, self.button_col, self.button_rect)
 
         # Dodanie tekstu
-        button.button_text(self)
+        Button.button_text(self)
         # Dodanie cieniowania
-        button.button_shade(self)
+        Button.button_shade(self)
 
         return action
 
 
-class counter(Colours):
+class Counter(Colours):
 
     def __init__(self):
         super().__init__()
@@ -102,32 +99,29 @@ class counter(Colours):
         self.width = 180
         self.height = 80
 
-    def getCounterValue(self):
+    def get_counter_value(self):
         return self.value
 
-    def getCounterValueAsINT(self):
-        return int(self.value)
-
-    def setCounterValue(self, value):
+    def set_counter_value(self, value):
         if len(self.value) < 3:
             tmpvalue = self.value
-            self.ClearCounterValue()
+            self.clear_counter_value()
             self.value = tmpvalue + value
 
-    def ClearCounterValue(self):
+    def clear_counter_value(self):
         self.value = ''
 
-    def CreateCounterAsText(self):
-        counterText = screen.font.render(self.value, True, self.white)
+    def create_counter_as_text(self):
+        counter_text = screen.font.render(self.value, True, self.white)
         if len(self.value) == 1 or 0:
-            screen.window.blit(counterText, (510, 40))
+            screen.window.blit(counter_text, (510, 40))
         if len(self.value) == 2:
-            screen.window.blit(counterText, (500, 40))
+            screen.window.blit(counter_text, (500, 40))
         if len(self.value) == 3:
-            screen.window.blit(counterText, (500, 40))
+            screen.window.blit(counter_text, (500, 40))
 
-    def BackspaceCounter(self):
+    def backspace_counter(self):
         self.value = self.value[:-1]
 
-    def CreateBGForCounter(self):
+    def create_bg_for_counter(self):
         pygame.draw.rect(screen.window, self.black, (self.x, self.y, self.width, self.height))
