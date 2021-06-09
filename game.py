@@ -79,11 +79,6 @@ def show_game_win_screen(counter, game):
                                            + str(game.averageTime), True, game.screen.white)
     game.window.blit(results_time, (120, 60))
 
-    if game.buttonRestart.draw_button():
-        counter.clear_counter_value()
-        game.menuState = True
-        game.stateOfGame = 'GAME'
-        game.curr_towar = 0
     return counter, game
 
 
@@ -93,12 +88,6 @@ def show_game_over_screen(counter, game):
     """
     przegrana_text = game.screen.font.render('Przegrałeś!', True, game.screen.white)
     game.window.blit(przegrana_text, (250, 300))
-
-    if game.buttonRestart.draw_button():
-        counter.clear_counter_value()
-        game.menuState = True
-        game.stateOfGame = 'GAME'
-        game.curr_towar = 0
 
     return counter, game
 
@@ -227,12 +216,6 @@ def show_game_screen(counter, game, testing, mode):
                 game.towar_list[game.curr_towar].weighed = True
                 game.do_zwazenia = False
 
-    if game.buttonPrzegrana.draw_button():
-        game.stateOfGame = 'GAMEOVER'
-
-    if game.buttonWygrana.draw_button():
-        game.timerStop = datetime.now()
-        game.stateOfGame = 'GAMEWIN'
     return counter, game
 
 
@@ -243,13 +226,13 @@ def create_towary_buttons(game):
     """
     typ = type(game.towar_list[game.curr_towar])
     if typ == Towary.TowarNaSztuki:
-        button_towar = ui.Button(20, 20, 2, game.towar_list[game.curr_towar].name + ' x' +
+        button_towar = ui.Button(20, 20, 3, game.towar_list[game.curr_towar].name + ' x' +
                                  str(game.towar_list[game.curr_towar].how_many))
     else:
         if not game.towar_list[game.curr_towar].weighed:
-            button_towar = ui.Button(20, 20, 2, game.towar_list[game.curr_towar].name + ' ?kg')
+            button_towar = ui.Button(20, 20, 2.5, game.towar_list[game.curr_towar].name + ' ?kg')
         else:
-            button_towar = ui.Button(20, 20, 2, game.towar_list[game.curr_towar].name + ' '
+            button_towar = ui.Button(20, 20, 2.5, game.towar_list[game.curr_towar].name + ' '
                                      + str(game.towar_list[game.curr_towar].weight) + 'kg')
     return button_towar
 
